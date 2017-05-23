@@ -1,5 +1,5 @@
 import {Record} from "immutable";
-import StatefulAction, {ActionState} from "./Action";
+import {ActionState, StatefulAction} from "./Action";
 import {IService} from "./Service";
 
 export type SerializedAction = {
@@ -7,7 +7,7 @@ export type SerializedAction = {
     payload: any;
 };
 
-export default class ServiceDispatcher {
+export class ServiceDispatcher {
 
     private services: IService[] = [];
 

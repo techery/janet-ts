@@ -15,7 +15,7 @@ export class BaseAction {
     }
 }
 
-export default class StatefulAction<T> extends BaseAction {
+export class StatefulAction<T> extends BaseAction {
     state: ActionState = ActionState.CREATED;
     error: Error | null = null;
     result: T | null = null;

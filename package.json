@@ -23,7 +23,8 @@
     "watch:test": "npm run test -- --watch"
   },
   "dependencies": {
-    "immutable": "^3.8.1"
+    "immutable": "^3.8.1",
+    "reflect-metadata": "^0.1.10"
   },
   "devDependencies": {
     "@types/chai": "^3.0.0",

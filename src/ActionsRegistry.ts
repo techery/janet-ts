@@ -1,4 +1,4 @@
-export default class ActionsRegistry {
+export class ActionsRegistry {
     actionsMapping: any = {};
 
     getClassByActionType(type: string): any {
