@@ -20,7 +20,7 @@ export function getFullClassName(target: any): string[] {
 
 export function getFullClassNameFromClass(target: any): string[] {
 
-    const classNames = ["@@janet"];
+    const classNames = [];
     let obj = target.prototype;
     let className: string = getClassName(target);
 
@@ -30,5 +30,8 @@ export function getFullClassNameFromClass(target: any): string[] {
         className = getClassName(obj.constructor);
     }
 
-    return classNames.filter((name) => name !== "Entity");
+    classNames.push("@@janet");
+
+
+    return classNames.filter((name) => name !== "Entity").reverse();
 }
