@@ -20,7 +20,7 @@ export function getFullClassName(target: any): string[] {
 
 export function getFullClassNameFromClass(target: any): string[] {
 
-    const classNames = [];
+    const classNames = ["@@janet"];
     let obj = target.prototype;
     let className: string = getClassName(target);
 
