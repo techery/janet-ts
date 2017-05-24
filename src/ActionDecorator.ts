@@ -6,7 +6,7 @@ import {getFullClassNameFromClass} from "./ClassHelpers";
 const actionsRegistry: ActionsRegistry = new ActionsRegistry();
 
 export function action(target: any): any {
-  const className = getFullClassNameFromClass(target).join(".");
+  const className = getFullClassNameFromClass(target).join("/");
 
   const actionConstructor: any = (...args: any[]) => {
     const instance = new target(...args);
