@@ -1,5 +1,4 @@
 export enum ActionState {
-    CREATED,
     RUNNING,
     FINISHED,
     FAILED
@@ -16,7 +15,7 @@ export class BaseAction {
 }
 
 export class StatefulAction<T> extends BaseAction {
-    state: ActionState = ActionState.CREATED;
+    state: ActionState = ActionState.RUNNING;
     error: Error | null = null;
     result: T | null = null;
 }

@@ -1,8 +1,7 @@
 export declare enum ActionState {
-    CREATED = 0,
-    RUNNING = 1,
-    FINISHED = 2,
-    FAILED = 3,
+    RUNNING = 0,
+    FINISHED = 1,
+    FAILED = 2,
 }
 export declare class BaseAction {
     set<K extends keyof this>(key: K, value: this[K]): this;

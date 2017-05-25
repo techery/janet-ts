@@ -18,7 +18,7 @@ export class ServiceDispatcher {
     dispatch(serializedAction: SerializedAction): void {
         const action: StatefulAction<any> = new (Record(serializedAction.payload, serializedAction.type)) as any;
 
-        if (action.state === ActionState.CREATED) {
+        if (action.state === ActionState.RUNNING) {
             const service = this.findService(action);
 
             if (service) {
