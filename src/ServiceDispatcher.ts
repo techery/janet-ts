@@ -1,6 +1,4 @@
-import {Record} from "immutable";
 import {ActionState, StatefulAction} from "./Action";
-import {SerializedAction} from "./Serializatiion";
 import {IService} from "./Service";
 
 export class ServiceDispatcher {
@@ -11,9 +9,7 @@ export class ServiceDispatcher {
 
   }
 
-  dispatch(serializedAction: SerializedAction): void {
-    const action: StatefulAction<any> = new (Record(serializedAction.payload, serializedAction.type)) as any;
-
+  dispatch(action: StatefulAction<any>): void {
     if (action.state === ActionState.RUNNING) {
       const service = this.findService(action);
 

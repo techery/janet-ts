@@ -1,10 +1,10 @@
-import { SerializedAction } from "./Serializatiion";
+import { StatefulAction } from "./Action";
 import { IService } from "./Service";
 export declare class ServiceDispatcher {
     private actionDispatcher;
     private services;
     constructor(actionDispatcher: any);
-    dispatch(serializedAction: SerializedAction): void;
+    dispatch(action: StatefulAction<any>): void;
     registerService(service: IService): void;
     private findService(action);
 }
