@@ -4,3 +4,4 @@ export * from "./Action";
 export * from "./ActionDecorator";
 export * from "./Serializatiion";
 export * from "./ClassHelpers";
+export * from "./Middleware";

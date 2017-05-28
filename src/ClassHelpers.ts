@@ -22,7 +22,9 @@ export function getFullClassNameFromClass(target: any): string[] {
 }
 
 export function getActionName(obj: any): string {
-  if (obj._name !== undefined) {
+  if (obj.type !== undefined) {
+    return obj.type;
+  } else if (obj._name !== undefined) {
     return obj._name;
   } else if (obj.className !== undefined) {
     return obj.className;
