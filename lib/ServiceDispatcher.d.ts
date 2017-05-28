@@ -1,8 +1,5 @@
+import { SerializedAction } from "./Serializatiion";
 import { IService } from "./Service";
-export declare type SerializedAction = {
-    type: string;
-    payload: any;
-};
 export declare class ServiceDispatcher {
     private actionDispatcher;
     private services;

@@ -1,38 +1,34 @@
 import {Record} from "immutable";
 import {ActionState, StatefulAction} from "./Action";
+import {SerializedAction} from "./Serializatiion";
 import {IService} from "./Service";
-
-export type SerializedAction = {
-    type: string;
-    payload: any;
-};
 
 export class ServiceDispatcher {
 
-    private services: IService[] = [];
+  private services: IService[] = [];
 
-    constructor(private actionDispatcher: any) {
+  constructor(private actionDispatcher: any) {
 
+  }
+
+  dispatch(serializedAction: SerializedAction): void {
+    const action: StatefulAction<any> = new (Record(serializedAction.payload, serializedAction.type)) as any;
+
+    if (action.state === ActionState.RUNNING) {
+      const service = this.findService(action);
+
+      if (service) {
+        service.dispatch(action);
+      }
     }
+  }
 
-    dispatch(serializedAction: SerializedAction): void {
-        const action: StatefulAction<any> = new (Record(serializedAction.payload, serializedAction.type)) as any;
+  registerService(service: IService): void {
+    service.setDispatcher(this.actionDispatcher);
+    this.services.push(service);
+  }
 
-        if (action.state === ActionState.RUNNING) {
-            const service = this.findService(action);
-
-            if (service) {
-                service.dispatch(action);
-            }
-        }
-    }
-
-    registerService(service: IService): void {
-        service.setDispatcher(this.actionDispatcher);
-        this.services.push(service);
-    }
-
-    private findService(action: any): IService | undefined {
-        return this.services.find((service) => service.accepts(action));
-    }
+  private findService(action: any): IService | undefined {
+    return this.services.find((service) => service.accepts(action));
+  }
 }
