@@ -32,6 +32,5 @@ export const failAction = <A extends BaseAction<R>, R>(action: A, error: Error):
 };
 
 export class BaseAction<T> {
-  private stub: T | undefined;
+  protected readonly __genericStub__DO_NOT_USE: T;
 }
-

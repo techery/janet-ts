@@ -14,5 +14,5 @@ export declare const startAction: <A extends BaseAction<R>, R>(action: A) => Act
 export declare const finishAction: <A extends BaseAction<R>, R>(action: A, result: R) => ActionHolder<A, R>;
 export declare const failAction: <A extends BaseAction<R>, R>(action: A, error: Error) => ActionHolder<A, R>;
 export declare class BaseAction<T> {
-    private stub;
+    protected readonly __genericStub__DO_NOT_USE: T;
 }
