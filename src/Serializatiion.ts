@@ -1,3 +1,4 @@
+import {ActionHolder} from "./Action";
 import {getActionName} from "./ClassHelpers";
 
 export type SerializedAction = {
@@ -22,4 +23,16 @@ export const serializeAction = (obj: any): SerializedAction => {
       type: getActionName(obj),
     };
   }
+};
+
+export const serializeActionHolder = (actionHolder: ActionHolder<any, any>): SerializedAction => {
+  return {
+    payload: {
+      action: toJson(actionHolder.action),
+      state: actionHolder.state,
+      result: toJson(actionHolder.result),
+      error: toJson(actionHolder.error),
+    },
+    type: getActionName(actionHolder.action),
+  };
 };

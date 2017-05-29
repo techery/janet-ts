@@ -1,6 +1,6 @@
 import {startAction} from "./Action";
 import {isJanetAction} from "./ActionDecorator";
-import {serializeAction} from "./Serializatiion";
+import {serializeActionHolder} from "./Serializatiion";
 import {IService} from "./Service";
 import {dispatch} from "./ServiceDispatcher";
 
@@ -16,7 +16,7 @@ export const janetMiddleware = (services: IService[]) => {
 
         dispatch(services, actionHolder, actionDispatcher);
 
-        return next(serializeAction(actionHolder));
+        return next(serializeActionHolder(actionHolder));
       } else {
         return next(action);
       }
