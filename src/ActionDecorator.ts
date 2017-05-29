@@ -5,7 +5,7 @@ import {getFullClassNameFromClass} from "./ClassHelpers";
 const actionsRegistry: ActionsRegistry = new ActionsRegistry();
 
 export const isJanetAction = (action: any) => {
-  return action.prototype.isJanetAction === true;
+  return action.constructor.isJanetAction === true;
 };
 
 export function action(target: any): any {
