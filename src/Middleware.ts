@@ -1,24 +1,25 @@
-import {getActionName} from "./ClassHelpers";
+import {startAction} from "./Action";
+import {isJanetAction} from "./ActionDecorator";
 import {serializeAction} from "./Serializatiion";
 import {IService} from "./Service";
-import {ServiceDispatcher} from "./ServiceDispatcher";
-
-const isJanetAction = (action: any) => {
-  return getActionName(action).startsWith("@@janet");
-};
+import {dispatch} from "./ServiceDispatcher";
 
 export const janetMiddleware = (services: IService[]) => {
   return (store: any) => {
 
-    const serviceMiddleware = new ServiceDispatcher(store.dispatch.bind(store), services);
+    const actionDispatcher = store.dispatch.bind(store);
 
     return (next: any) => (action: any) => {
 
       if (isJanetAction(action)) {
-        serviceMiddleware.dispatch(action);
-      }
+        const actionHolder = startAction(action);
 
-      return next(serializeAction(action));
+        dispatch(services, actionHolder, actionDispatcher);
+
+        return next(serializeAction(actionHolder));
+      } else {
+        return next(action);
+      }
     };
   };
 };

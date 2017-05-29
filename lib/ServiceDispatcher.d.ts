@@ -1,9 +1,4 @@
-import { StatefulAction } from "./Action";
+import { ActionHolder, BaseAction } from "./Action";
 import { ActionDispatcher, IService } from "./Service";
-export declare class ServiceDispatcher {
-    private actionDispatcher;
-    private services;
-    constructor(actionDispatcher: ActionDispatcher, services: IService[]);
-    dispatch(action: StatefulAction<any>): void;
-    private findService(action);
-}
+export declare type AnyActionHolder = ActionHolder<BaseAction<any>, any>;
+export declare function dispatch(services: IService[], actionHolder: AnyActionHolder, actionDispatcher: ActionDispatcher): void;

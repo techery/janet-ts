@@ -1,25 +1,14 @@
-import {ActionState, StatefulAction} from "./Action";
+import {ActionHolder, ActionState, BaseAction} from "./Action";
 import {ActionDispatcher, IService} from "./Service";
 
-export class ServiceDispatcher {
+export type AnyActionHolder = ActionHolder<BaseAction<any>, any>;
 
-  constructor(private actionDispatcher: ActionDispatcher, private services: IService[]) {
-    services.forEach((service) => {
-      service.setDispatcher(this.actionDispatcher);
-    });
-  }
+export function dispatch(services: IService[], actionHolder: AnyActionHolder, actionDispatcher: ActionDispatcher): void {
+  if (actionHolder.state === ActionState.RUNNING) {
+    const service = services.find((service) => service.accepts(actionHolder.action));
 
-  dispatch(action: StatefulAction<any>): void {
-    if (action.state === ActionState.RUNNING) {
-      const service = this.findService(action);
-
-      if (service) {
-        service.dispatch(action);
-      }
+    if (service) {
+      service.dispatch(actionHolder, actionDispatcher);
     }
-  }
-
-  private findService(action: any): IService | undefined {
-    return this.services.find((service) => service.accepts(action));
   }
 }

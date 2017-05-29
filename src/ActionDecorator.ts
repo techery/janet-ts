@@ -5,6 +5,10 @@ import {getFullClassNameFromClass} from "./ClassHelpers";
 
 const actionsRegistry: ActionsRegistry = new ActionsRegistry();
 
+export const isJanetAction = (action: any) => {
+  return action.prototype.isJanetAction === true;
+};
+
 export function action(target: any): any {
   const className = getFullClassNameFromClass(target).join("/");
 
@@ -17,6 +21,7 @@ export function action(target: any): any {
   };
 
   actionConstructor.className = className;
+  actionConstructor.isJanetAction = true;
 
   actionsRegistry.registerClass(className, target);
 

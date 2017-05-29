@@ -1,10 +1,9 @@
-import {StatefulAction} from "./Action";
+import {ActionHolder, BaseAction} from "./Action";
 
-export type ActionDispatcher = (action: StatefulAction<any>) => void;
+export type ActionDispatcher = (action: BaseAction<any>) => void;
 
 export interface IService {
-  setDispatcher(dispatcher: ActionDispatcher): void;
-  dispatch(action: any): void;
+  dispatch(actionHolder: ActionHolder<any, any>, dispatcher: ActionDispatcher): void;
   accepts(action: any): boolean;
 }
 
