@@ -1,4 +1,5 @@
 import Base = Mocha.reporters.Base;
+import {getFullClassNameFromClass} from "./ClassHelpers";
 export enum ActionState {
   RUNNING,
   FINISHED,
@@ -31,6 +32,21 @@ export const failAction = <A extends BaseAction<R>, R>(action: A, error: Error):
   return new ActionHolder<A, R>(action, ActionState.FAILED, error, null);
 };
 
+const actionIds: any = {};
+
+const nextActionId = (action: any): string => {
+  const actionName = getFullClassNameFromClass(action.constructor).join("/");
+
+  if (actionIds[actionName] === undefined) {
+    actionIds[actionName] = 0;
+  }
+
+  const actionId = actionIds[actionName]++;
+
+  return `${actionName}-${actionId}`;
+};
+
 export class BaseAction<T> {
   protected readonly __genericStub__DO_NOT_USE: T;
+  public __id = nextActionId(this);
 }

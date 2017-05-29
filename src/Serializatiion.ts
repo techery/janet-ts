@@ -4,15 +4,7 @@ import {getActionName} from "./ClassHelpers";
 export type SerializedAction = any;
 
 const toJson = (obj: any) => {
-  if (obj) {
-    if (obj.toJS !== undefined) {
-      return obj.toJS();
-    } else {
-      return JSON.parse(JSON.stringify(obj));
-    }
-  } else {
-    return null;
-  }
+  return JSON.parse(JSON.stringify(obj));
 };
 
 export const serializeAction = (obj: any): SerializedAction => {

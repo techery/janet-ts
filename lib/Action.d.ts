@@ -15,4 +15,5 @@ export declare const finishAction: <A extends BaseAction<R>, R>(action: A, resul
 export declare const failAction: <A extends BaseAction<R>, R>(action: A, error: Error) => ActionHolder<A, R>;
 export declare class BaseAction<T> {
     protected readonly __genericStub__DO_NOT_USE: T;
+    __id: string;
 }
