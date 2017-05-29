@@ -1,10 +1,11 @@
+import Base = Mocha.reporters.Base;
 export enum ActionState {
   RUNNING,
   FINISHED,
   FAILED
 }
 
-export interface ActionHolder<A, R> {
+export interface ActionHolder<A extends BaseAction<R>, R> {
   action: A;
   state: ActionState;
   error: Error | null;

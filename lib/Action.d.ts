@@ -3,7 +3,7 @@ export declare enum ActionState {
     FINISHED = 1,
     FAILED = 2,
 }
-export interface ActionHolder<A, R> {
+export interface ActionHolder<A extends BaseAction<R>, R> {
     action: A;
     state: ActionState;
     error: Error | null;
