@@ -11,7 +11,7 @@ const toJson = (obj: any) => {
     if (obj.toJS !== undefined) {
       return obj.toJS();
     } else {
-      return obj;
+      return JSON.parse(JSON.stringify(obj));
     }
   } else {
     return null;
