@@ -1,4 +1,3 @@
-import {Record} from "immutable";
 import "reflect-metadata";
 import {ActionsRegistry} from "./ActionsRegistry";
 import {getFullClassNameFromClass} from "./ClassHelpers";
@@ -14,10 +13,7 @@ export function action(target: any): any {
 
   const actionConstructor: any = (...args: any[]) => {
     const instance = new target(...args);
-
-    const record: any = Record(instance, className);
-
-    return record(instance);
+    return Object.freeze(instance);
   };
 
   actionConstructor.className = className;
