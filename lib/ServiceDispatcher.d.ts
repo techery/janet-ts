@@ -1,10 +1,9 @@
 import { StatefulAction } from "./Action";
-import { IService } from "./Service";
+import { ActionDispatcher, IService } from "./Service";
 export declare class ServiceDispatcher {
     private actionDispatcher;
     private services;
-    constructor(actionDispatcher: any);
+    constructor(actionDispatcher: ActionDispatcher, services: IService[]);
     dispatch(action: StatefulAction<any>): void;
-    registerService(service: IService): void;
     private findService(action);
 }

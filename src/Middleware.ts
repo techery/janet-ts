@@ -9,21 +9,16 @@ const isJanetAction = (action: any) => {
 
 export const janetMiddleware = (services: IService[]) => {
   return (store: any) => {
-    const serviceMiddleware: ServiceDispatcher = new ServiceDispatcher((action: any) => {
-      const serializedAction = serializeAction(action);
-      store.dispatch(serializedAction);
-    });
 
-    services.forEach(serviceMiddleware.registerService.bind(serviceMiddleware));
+    const serviceMiddleware = new ServiceDispatcher(store.dispatch.bind(store), services);
 
     return (next: any) => (action: any) => {
-      const returnValue = next(serializeAction(action));
 
       if (isJanetAction(action)) {
         serviceMiddleware.dispatch(action);
       }
 
-      return returnValue;
+      return next(serializeAction(action));
     };
   };
 };

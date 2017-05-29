@@ -1,12 +1,12 @@
 import {ActionState, StatefulAction} from "./Action";
-import {IService} from "./Service";
+import {ActionDispatcher, IService} from "./Service";
 
 export class ServiceDispatcher {
 
-  private services: IService[] = [];
-
-  constructor(private actionDispatcher: any) {
-
+  constructor(private actionDispatcher: ActionDispatcher, private services: IService[]) {
+    services.forEach((service) => {
+      service.setDispatcher(this.actionDispatcher);
+    });
   }
 
   dispatch(action: StatefulAction<any>): void {
@@ -17,11 +17,6 @@ export class ServiceDispatcher {
         service.dispatch(action);
       }
     }
-  }
-
-  registerService(service: IService): void {
-    service.setDispatcher(this.actionDispatcher);
-    this.services.push(service);
   }
 
   private findService(action: any): IService | undefined {
