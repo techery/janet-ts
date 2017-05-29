@@ -28,7 +28,11 @@ export function getActionName(obj: any): string {
     return obj._name;
   } else if (obj.className !== undefined) {
     return obj.className;
-  } else {
+  } else if (typeof obj === "object") {
+    return getFullClassNameFromClass(obj.constructor).join("/");
+  } else if (typeof obj === "function") {
     return getFullClassNameFromClass(obj).join("/");
+  } else {
+    return null;
   }
 }
