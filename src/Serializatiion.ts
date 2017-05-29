@@ -7,10 +7,14 @@ export type SerializedAction = {
 };
 
 const toJson = (obj: any) => {
-  if (obj.toJS !== undefined) {
-    return obj.toJS();
+  if (obj) {
+    if (obj.toJS !== undefined) {
+      return obj.toJS();
+    } else {
+      return obj;
+    }
   } else {
-    return obj;
+    return null;
   }
 };
 
