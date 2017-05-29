@@ -38,7 +38,7 @@ const nextActionId = (action: any): string => {
   const actionName = getFullClassNameFromClass(action.constructor).join("/");
 
   if (actionIds[actionName] === undefined) {
-    actionIds[actionName] = 0;
+    actionIds[actionName] = 1;
   }
 
   const actionId = actionIds[actionName]++;
