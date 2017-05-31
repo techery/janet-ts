@@ -13,10 +13,11 @@ export const janetMiddleware = (services: IService[]) => {
 
       if (isJanetAction(action)) {
         const actionHolder = startAction(action);
+        const returnValue = next(serializeActionHolder(actionHolder));
 
         dispatch(services, actionHolder, actionDispatcher);
 
-        return next(serializeActionHolder(actionHolder));
+        return returnValue;
       } else if (action instanceof ActionHolder) {
         next(serializeActionHolder(action));
       } else {
