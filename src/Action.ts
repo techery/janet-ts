@@ -48,5 +48,5 @@ const nextActionId = (action: any): string => {
 
 export class BaseAction<T> {
   protected readonly __genericStub__DO_NOT_USE: T;
-  public __id = nextActionId(this);
+  private __id = nextActionId(this);
 }

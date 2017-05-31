@@ -17,6 +17,7 @@ export function action(target: any): any {
   };
 
   actionConstructor.className = className;
+  target.className = className;
   target.isJanetAction = true;
 
   actionsRegistry.registerClass(className, target);
