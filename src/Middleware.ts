@@ -9,6 +9,10 @@ export const janetMiddleware = (services: IService[]) => {
 
     const actionDispatcher = store.dispatch.bind(store);
 
+    services.forEach((service) => {
+      service.setDispatcher(actionDispatcher);
+    });
+
     return (next: any) => (action: any) => {
 
       if (isJanetAction(action)) {
