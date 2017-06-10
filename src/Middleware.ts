@@ -1,4 +1,4 @@
-import {ActionHolder, startAction} from "./Action";
+import {ActionHolder, failAction, finishAction, startAction} from "./Action";
 import {isJanetAction} from "./ActionDecorator";
 import {serializeActionHolder} from "./Serializatiion";
 import {IService} from "./Service";
@@ -7,10 +7,22 @@ import {dispatch} from "./ServiceDispatcher";
 export const janetMiddleware = (services: IService[]) => {
   return (store: any) => {
 
-    const actionDispatcher = store.dispatch.bind(store);
+    const actionDispatcher = (action: any) => {
+      //noinspection JSIgnoredPromiseFromCall
+      store.dispatch(action);
+    };
+
+    const actionExecutor = (action: any): Promise<any> => {
+      const actionHolder = startAction(action);
+      return dispatch(services, actionHolder).then((result) => {
+        actionDispatcher(finishAction(actionHolder.action, result));
+      }).catch((error) => {
+        actionDispatcher(failAction(actionHolder.action, error));
+      });
+    };
 
     services.forEach((service) => {
-      service.setDispatcher(actionDispatcher);
+      service.connect(actionDispatcher, actionExecutor);
     });
 
     return (next: any) => (action: any) => {
@@ -19,11 +31,12 @@ export const janetMiddleware = (services: IService[]) => {
         const actionHolder = startAction(action);
         const returnValue = next(serializeActionHolder(actionHolder));
 
-        dispatch(services, actionHolder, actionDispatcher);
+        //noinspection JSIgnoredPromiseFromCall
+        actionExecutor(action);
 
         return returnValue;
       } else if (action instanceof ActionHolder) {
-        next(serializeActionHolder(action));
+        return next(serializeActionHolder(action));
       } else {
         return next(action);
       }
