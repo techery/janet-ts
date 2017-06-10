@@ -12,7 +12,7 @@ export const janetMiddleware = (services: IService[]) => {
       store.dispatch(action);
     };
 
-    const actionExecutor = (action: any): Promise<any> => {
+    const actionExecutor = (action: any): Promise<any> | null => {
       const actionHolder = startAction(action);
       const actionPromise = dispatch(services, actionHolder);
 
@@ -26,7 +26,7 @@ export const janetMiddleware = (services: IService[]) => {
 
         return actionPromise;
       } else {
-        return Promise.reject("Can't handle action:" + action);
+        return Promise.resolve(true);
       }
     };
 
