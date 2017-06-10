@@ -17,11 +17,14 @@ export const janetMiddleware = (services: IService[]) => {
       const actionPromise = dispatch(services, actionHolder);
 
       if (actionPromise) {
-        return actionPromise.then((result) => {
+
+        actionPromise.then((result) => {
           actionDispatcher(finishAction(actionHolder.action, result));
         }).catch((error) => {
           actionDispatcher(failAction(actionHolder.action, error));
         });
+
+        return actionPromise;
       } else {
         return Promise.reject("Can't handle action:" + action);
       }
