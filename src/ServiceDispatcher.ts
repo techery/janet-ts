@@ -9,8 +9,10 @@ export function dispatch(services: IService[], actionHolder: AnyActionHolder): P
 
     if (service) {
       return service.dispatch(actionHolder);
+    } else {
+      return Promise.reject(new Error("Can't find service for action:" + actionHolder.action.constructor.name));
     }
   } else {
-    return Promise.reject(new Error("Can't find service for action:" + actionHolder.action.constructor.name));
+    return Promise.reject(new Error("Action is already running:" + actionHolder.action.constructor.name));
   }
 }
