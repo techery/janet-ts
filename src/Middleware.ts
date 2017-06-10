@@ -14,11 +14,17 @@ export const janetMiddleware = (services: IService[]) => {
 
     const actionExecutor = (action: any): Promise<any> => {
       const actionHolder = startAction(action);
-      return dispatch(services, actionHolder).then((result) => {
-        actionDispatcher(finishAction(actionHolder.action, result));
-      }).catch((error) => {
-        actionDispatcher(failAction(actionHolder.action, error));
-      });
+      const actionPromise = dispatch(services, actionHolder);
+
+      if (actionPromise) {
+        return actionPromise.then((result) => {
+          actionDispatcher(finishAction(actionHolder.action, result));
+        }).catch((error) => {
+          actionDispatcher(failAction(actionHolder.action, error));
+        });
+      } else {
+        return Promise.reject("Can't handle action:" + action);
+      }
     };
 
     services.forEach((service) => {
