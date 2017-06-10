@@ -1,4 +1,4 @@
-import {ActionHolder, ActionState, BaseAction} from "./Action";
+import {ActionHolder, ActionState, BaseAction, failAction, finishAction} from "./Action";
 import {ActionDispatcher, IService} from "./Service";
 
 export type AnyActionHolder = ActionHolder<BaseAction<any>, any>;
@@ -8,7 +8,11 @@ export function dispatch(services: IService[], actionHolder: AnyActionHolder, ac
     const service = services.find((service) => service.accepts(actionHolder.action));
 
     if (service) {
-      service.dispatch(actionHolder, actionDispatcher);
+      service.dispatch(actionHolder).then((result) => {
+        actionDispatcher(finishAction(actionHolder.action, result));
+      }).catch((error) => {
+        actionDispatcher(failAction(actionHolder.action, error));
+      });
     }
   }
 }

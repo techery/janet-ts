@@ -11,18 +11,12 @@ export const isJanetAction = (action: any) => {
 export function action(target: any): any {
   const className = getFullClassNameFromClass(target).join("/");
 
-  const actionConstructor: any = (...args: any[]) => {
-    const instance = new target(...args);
-    return Object.freeze(instance);
-  };
-
-  actionConstructor.className = className;
   target.className = className;
   target.isJanetAction = true;
 
   actionsRegistry.registerClass(className, target);
 
-  return actionConstructor;
+  return target;
 }
 
 export function getClassByActionType(type: string): any {
