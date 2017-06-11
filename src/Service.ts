@@ -1,7 +1,7 @@
 import {ActionHolder, BaseAction} from "./Action";
 
 export type ActionDispatcher = (action: ActionHolder<any, any>) => void;
-export type ActionExecutor = (action: ActionHolder<any, any>) => Promise<any>;
+export type ActionExecutor = <T extends BaseAction<R>, R>(action: T) => Promise<R>;
 
 export interface IService {
   connect(dispatcher: ActionDispatcher, executor: ActionExecutor): void;
