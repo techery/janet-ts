@@ -20,7 +20,7 @@ export const janetMiddleware = (services: IService[]) => {
 
         actionPromise.then((result) => {
           actionDispatcher(finishAction(actionHolder.action, result));
-        }).catch((error) => {
+        }).catch((error: Error) => {
           actionDispatcher(failAction(actionHolder.action, error));
         });
 

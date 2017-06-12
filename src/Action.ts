@@ -29,7 +29,7 @@ export const finishAction = <A extends BaseAction<R>, R>(action: A, result: R): 
 };
 
 export const failAction = <A extends BaseAction<R>, R>(action: A, error: Error): ActionHolder<A, R> => {
-  return new ActionHolder<A, R>(action, ActionState.FAILED, error, null);
+  return new ActionHolder<A, R>(action, ActionState.FAILED, error.message, null);
 };
 
 const actionIds: any = {};
