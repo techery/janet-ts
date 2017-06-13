@@ -5,7 +5,7 @@ import {IService} from "./Service";
 import {dispatch} from "./ServiceDispatcher";
 
 export interface ErrorInterceptor {
-  onError(error: Error): void;
+  (error: Error): void;
 }
 
 export const janetMiddleware = (services: IService[], errorInterceptor: ErrorInterceptor = null) => {
@@ -26,7 +26,7 @@ export const janetMiddleware = (services: IService[], errorInterceptor: ErrorInt
           actionDispatcher(finishAction(actionHolder.action, result));
         }).catch((error: Error) => {
           if (errorInterceptor) {
-            errorInterceptor.onError(error);
+            errorInterceptor(error);
           }
           actionDispatcher(failAction(actionHolder.action, error));
         });
