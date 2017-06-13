@@ -4,7 +4,11 @@ import {serializeActionHolder} from "./Serializatiion";
 import {IService} from "./Service";
 import {dispatch} from "./ServiceDispatcher";
 
-export const janetMiddleware = (services: IService[]) => {
+export interface ErrorInterceptor {
+  onError(error: Error): void;
+}
+
+export const janetMiddleware = (services: IService[], errorInterceptor: ErrorInterceptor = null) => {
   return (store: any) => {
 
     const actionDispatcher = (action: any) => {
@@ -21,6 +25,9 @@ export const janetMiddleware = (services: IService[]) => {
         actionPromise.then((result) => {
           actionDispatcher(finishAction(actionHolder.action, result));
         }).catch((error: Error) => {
+          if (errorInterceptor) {
+            errorInterceptor.onError(error);
+          }
           actionDispatcher(failAction(actionHolder.action, error));
         });
 

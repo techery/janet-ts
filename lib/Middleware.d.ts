@@ -1,2 +1,5 @@
 import { IService } from "./Service";
-export declare const janetMiddleware: (services: IService[]) => (store: any) => (next: any) => (action: any) => any;
+export interface ErrorInterceptor {
+    onError(error: Error): void;
+}
+export declare const janetMiddleware: (services: IService[], errorInterceptor?: ErrorInterceptor) => (store: any) => (next: any) => (action: any) => any;
