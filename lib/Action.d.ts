@@ -1,7 +1,8 @@
 export declare enum ActionState {
-    RUNNING = 0,
-    FINISHED = 1,
-    FAILED = 2,
+    INITIAL = 0,
+    RUNNING = 1,
+    FINISHED = 2,
+    FAILED = 3,
 }
 export declare class ActionHolder<A extends BaseAction<R>, R> {
     readonly action: A;

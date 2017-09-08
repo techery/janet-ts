@@ -1,6 +1,6 @@
-import Base = Mocha.reporters.Base;
 import {getFullClassNameFromClass} from "./ClassHelpers";
 export enum ActionState {
+  INITIAL,
   RUNNING,
   FINISHED,
   FAILED
