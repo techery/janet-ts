@@ -1,24 +1,14 @@
 import "reflect-metadata";
-import {ActionsRegistry} from "./ActionsRegistry";
-import {getFullClassNameFromClass} from "./ClassHelpers";
+import {getFullClassNameComponentsFromClass} from "./ClassHelpers";
 
-const actionsRegistry: ActionsRegistry = new ActionsRegistry();
-
-export const isJanetAction = (action: any) => {
-  return action.constructor.isJanetAction === true;
+export const isJanetAction = (decoratedAction: any) => {
+  return decoratedAction.constructor.isJanetAction === true;
 };
 
 export function action(target: any): any {
-  const className = getFullClassNameFromClass(target).join("/");
 
-  target.className = className;
+  target.className = getFullClassNameComponentsFromClass(target).join("/");
   target.isJanetAction = true;
 
-  actionsRegistry.registerClass(className, target);
-
   return target;
-}
-
-export function getClassByActionType(type: string): any {
-  return actionsRegistry.getClassByActionType(type);
 }

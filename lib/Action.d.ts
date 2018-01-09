@@ -4,17 +4,29 @@ export declare enum ActionState {
     FINISHED = 2,
     FAILED = 3,
 }
-export declare class ActionHolder<A extends BaseAction<R>, R> {
+export interface ActionHolder<A extends BaseAction<R>, R> {
+    readonly type: string;
     readonly action: A;
     readonly state: ActionState;
     readonly error: Error | null;
     readonly result: R | null;
-    constructor(action: A, state: ActionState, error: Error | any, result: any | R);
 }
+export interface StartedActionHolder<A extends BaseAction<R>, R> {
+    readonly action: A;
+}
+export interface SucceededActionHolder<A extends BaseAction<R>, R> {
+    readonly action: A;
+    readonly result: R;
+}
+export interface FailedActionHolder<A extends BaseAction<R>, R> {
+    readonly action: A;
+    readonly error: Error;
+}
+export declare const emptyActionHolder: <A extends BaseAction<R>, R>(type?: string) => ActionHolder<A, R>;
 export declare const startAction: <A extends BaseAction<R>, R>(action: A) => ActionHolder<A, R>;
 export declare const finishAction: <A extends BaseAction<R>, R>(action: A, result: R) => ActionHolder<A, R>;
 export declare const failAction: <A extends BaseAction<R>, R>(action: A, error: Error) => ActionHolder<A, R>;
 export declare class BaseAction<T> {
     protected readonly __genericStub__DO_NOT_USE: T;
-    private __id;
+    __targetKey?: string;
 }

@@ -1,5 +1,4 @@
+import { BaseAction } from "./Action";
 import { IService } from "./Service";
-export interface ErrorInterceptor {
-    (error: Error): void;
-}
-export declare const janetMiddleware: (services: IService[], errorInterceptor?: ErrorInterceptor) => (store: any) => (next: any) => (action: any) => any;
+export declare type ActionMiddleware = (actionPromise: Promise<BaseAction<any>>, store: any) => Promise<BaseAction<any>>;
+export declare const janetMiddleware: (services: ReadonlyArray<IService>, ...actionMiddlewares: ActionMiddleware[]) => (store: any) => (next: any) => (action: any) => any;

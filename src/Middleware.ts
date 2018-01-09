@@ -1,43 +1,49 @@
-import {ActionHolder, failAction, finishAction, startAction} from "./Action";
-import {isJanetAction} from "./ActionDecorator";
-import {serializeActionHolder} from "./Serializatiion";
-import {IService} from "./Service";
-import {dispatch} from "./ServiceDispatcher";
+import { CommandsService } from "./CommandsService";
+import { BaseAction, failAction, finishAction, startAction } from "./Action";
+import { isJanetAction } from "./ActionDecorator";
+import { IService } from "./Service";
+import { dispatch } from "./ServiceDispatcher";
 
-export interface ErrorInterceptor {
-  (error: Error): void;
-}
+export type ActionMiddleware = (actionPromise: Promise<BaseAction<any>>, store: any) => Promise<BaseAction<any>>;
 
-export const janetMiddleware = (services: IService[], errorInterceptor: ErrorInterceptor = null) => {
+// tslint:disable-next-line:readonly-array
+export const janetMiddleware = (services: ReadonlyArray<IService>, ...actionMiddlewares: ActionMiddleware[]) => {
+
+  const defaultServices: IService[] = [];
+  defaultServices.push(new CommandsService());
+
+  const allServices = services.concat(...defaultServices);
+
   return (store: any) => {
 
-    const actionDispatcher = (action: any) => {
+    const actionDispatcher = (actionHolder: any) => {
       //noinspection JSIgnoredPromiseFromCall
-      store.dispatch(action);
+      store.dispatch(actionHolder);
     };
 
-    const actionExecutor = (action: any): Promise<any> | null => {
+    const actionExecutor = (action: BaseAction<any>): Promise<any> => {
       const actionHolder = startAction(action);
-      const actionPromise = dispatch(services, actionHolder);
+      const actionPromise = dispatch(allServices, actionHolder);
 
       if (actionPromise) {
 
-        actionPromise.then((result) => {
+        const wrappedActionPromise = actionMiddlewares.reduce((promise, middleware) => {
+          return middleware(promise, store);
+        }, actionPromise);
+
+        wrappedActionPromise.then((result) => {
           actionDispatcher(finishAction(actionHolder.action, result));
         }).catch((error: Error) => {
-          if (errorInterceptor) {
-            errorInterceptor(error);
-          }
           actionDispatcher(failAction(actionHolder.action, error));
         });
 
-        return actionPromise;
+        return wrappedActionPromise;
       } else {
         return Promise.resolve(true);
       }
     };
 
-    services.forEach((service) => {
+    allServices.forEach((service) => {
       service.connect(actionDispatcher, actionExecutor);
     });
 
@@ -45,14 +51,12 @@ export const janetMiddleware = (services: IService[], errorInterceptor: ErrorInt
 
       if (isJanetAction(action)) {
         const actionHolder = startAction(action);
-        const returnValue = next(serializeActionHolder(actionHolder));
+        const returnValue = next(actionHolder);
 
         //noinspection JSIgnoredPromiseFromCall
         actionExecutor(action);
 
         return returnValue;
-      } else if (action instanceof ActionHolder) {
-        return next(serializeActionHolder(action));
       } else {
         return next(action);
       }

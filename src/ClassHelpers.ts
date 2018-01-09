@@ -1,10 +1,10 @@
-function getClassName(constructor: any): string {
+export function getClassName(constructor: any): string {
   const funcNameRegex = new RegExp("function (\\w+)\\(");
   const results = (funcNameRegex).exec(constructor.toString());
   return (results && results.length > 1) ? results[1] : "";
 }
 
-export function getFullClassNameFromClass(target: any): string[] {
+export function getFullClassNameComponentsFromClass(target: any): ReadonlyArray<string> {
 
   const classNames = [];
   let obj = target.prototype;
@@ -18,21 +18,17 @@ export function getFullClassNameFromClass(target: any): string[] {
 
   classNames.push("@@janet");
 
-  return classNames.filter((name) => name !== "Entity").reverse();
+  return classNames.reverse();
 }
 
 export function getActionName(obj: any): string {
   if (obj.type !== undefined) {
     return obj.type;
-  } else if (obj._name !== undefined) {
-    return obj._name;
-  } else if (obj.className !== undefined) {
-    return obj.className;
   } else if (typeof obj === "object") {
-    return getFullClassNameFromClass(obj.constructor).join("/");
+    return getFullClassNameComponentsFromClass(obj.constructor).join("/");
   } else if (typeof obj === "function") {
-    return getFullClassNameFromClass(obj).join("/");
+    return getFullClassNameComponentsFromClass(obj).join("/");
   } else {
-    return null;
+    throw new Error(`Invalid action type:${JSON.stringify(obj)}`);
   }
 }
