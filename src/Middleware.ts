@@ -43,8 +43,12 @@ export const janetMiddleware = (services: ReadonlyArray<IService>, ...actionMidd
       }
     };
 
+    const stateProvider = () => {
+      return store.getState();
+    };
+
     allServices.forEach((service) => {
-      service.connect(actionDispatcher, actionExecutor);
+      service.connect(actionDispatcher, actionExecutor, stateProvider);
     });
 
     return (next: any) => (action: any) => {

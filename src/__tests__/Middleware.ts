@@ -1,4 +1,4 @@
-import {ActionDispatcher, ActionExecutor, IService} from "janet-ts/Service";
+import {ActionDispatcher, ActionExecutor, IService} from "../Service";
 import "jest";
 import {ActionHolder, ActionState, BaseAction, startAction} from "../Action";
 import {action} from "../ActionDecorator";
