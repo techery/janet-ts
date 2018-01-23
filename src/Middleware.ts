@@ -16,7 +16,7 @@ export const janetMiddleware = (services: ReadonlyArray<IService>, ...actionMidd
 
   return (store: any) => {
 
-    const actionDispatcher = (actionHolder: any) => {
+    const dispatcherAction = (actionHolder: any) => {
       //noinspection JSIgnoredPromiseFromCall
       store.dispatch(actionHolder);
     };
@@ -31,9 +31,9 @@ export const janetMiddleware = (services: ReadonlyArray<IService>, ...actionMidd
         }, actionPromise);
 
         wrappedActionPromise.then((result) => {
-          actionDispatcher(finishAction(actionHolder.action, result));
+          dispatcherAction(finishAction(actionHolder.action, result));
         }).catch((error: Error) => {
-          actionDispatcher(failAction(actionHolder.action, error));
+          dispatcherAction(failAction(actionHolder.action, error));
         });
 
         return wrappedActionPromise;
@@ -45,7 +45,7 @@ export const janetMiddleware = (services: ReadonlyArray<IService>, ...actionMidd
     const executeAction = (action: BaseAction<any>) : Promise<any> => {
       const actionHolder = startAction(action);
 
-      actionDispatcher(actionHolder);
+      dispatcherAction(actionHolder);
 
       return executeActionHolder(actionHolder);
     };
@@ -55,7 +55,7 @@ export const janetMiddleware = (services: ReadonlyArray<IService>, ...actionMidd
     };
 
     allServices.forEach((service) => {
-      service.connect(actionDispatcher, executeAction, stateProvider);
+      service.connect(dispatcherAction, executeAction, stateProvider);
     });
 
     return (next: any) => (action: any) => {
