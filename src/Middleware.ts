@@ -1,5 +1,5 @@
 import { CommandsService } from "./CommandsService";
-import { BaseAction, failAction, finishAction, startAction } from "./Action";
+import {ActionHolder, BaseAction, failAction, finishAction, startAction} from "./Action";
 import { isJanetAction } from "./ActionDecorator";
 import { IService } from "./Service";
 import { dispatch } from "./ServiceDispatcher";
@@ -21,8 +21,7 @@ export const janetMiddleware = (services: ReadonlyArray<IService>, ...actionMidd
       store.dispatch(actionHolder);
     };
 
-    const actionExecutor = (action: BaseAction<any>): Promise<any> => {
-      const actionHolder = startAction(action);
+    const executeActionHolder = (actionHolder: ActionHolder<BaseAction<any>, any>): Promise<any> => {
       const actionPromise = dispatch(allServices, actionHolder);
 
       if (actionPromise) {
@@ -43,12 +42,20 @@ export const janetMiddleware = (services: ReadonlyArray<IService>, ...actionMidd
       }
     };
 
+    const executeAction = (action: BaseAction<any>) : Promise<any> => {
+      const actionHolder = startAction(action);
+
+      actionDispatcher(actionHolder);
+
+      return executeActionHolder(actionHolder);
+    };
+
     const stateProvider = () => {
       return store.getState();
     };
 
     allServices.forEach((service) => {
-      service.connect(actionDispatcher, actionExecutor, stateProvider);
+      service.connect(actionDispatcher, executeAction, stateProvider);
     });
 
     return (next: any) => (action: any) => {
@@ -58,7 +65,7 @@ export const janetMiddleware = (services: ReadonlyArray<IService>, ...actionMidd
         const returnValue = next(actionHolder);
 
         //noinspection JSIgnoredPromiseFromCall
-        actionExecutor(action);
+        executeActionHolder(actionHolder);
 
         return returnValue;
       } else {
