@@ -64,10 +64,7 @@ export const janetMiddleware = (services: ReadonlyArray<IService>, ...actionMidd
         const actionHolder = startAction(action);
         const returnValue = next(actionHolder);
 
-        //noinspection JSIgnoredPromiseFromCall
-        executeActionHolder(actionHolder);
-
-        return returnValue;
+        return executeActionHolder(actionHolder);
       } else {
         return next(action);
       }
